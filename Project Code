@@ -1,0 +1,85 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
+@TeleOp(name = "RoadCleanerRobot3 (Blocks to Java)")
+public class RoadCleanerRobot3 extends LinearOpMode {
+
+  private DcMotor rightmotor;
+  private DcMotor leftmotor;
+  private Servo robotarm1;
+  private Servo robotarm2;
+  private Servo robotarm3;
+  private Servo RightServo;
+  private Servo LeftServo;
+
+  /**
+   * This sample contains the bare minimum Blocks for any regular OpMode. The 3 blue
+   * Comment Blocks show where to place Initialization code (runs once, after touching the
+   * DS INIT button, and before touching the DS Start arrow), Run code (runs once, after
+   * touching Start), and Loop code (runs repeatedly while the OpMode is active, namely not
+   * Stopped).
+   */
+  @Override
+  public void runOpMode() {
+    float vertical;
+    float horizontal;
+    float pivot;
+
+    rightmotor = hardwareMap.get(DcMotor.class, "right motor");
+    leftmotor = hardwareMap.get(DcMotor.class, "left motor");
+    robotarm1 = hardwareMap.get(Servo.class, "robot arm #1");
+    robotarm2 = hardwareMap.get(Servo.class, "robot arm #2");
+    robotarm3 = hardwareMap.get(Servo.class, "robot arm #3");
+    RightServo = hardwareMap.get(Servo.class, "RightServo");
+    LeftServo = hardwareMap.get(Servo.class, "LeftServo");
+
+    // Put initializations blocks here.
+    rightmotor.setDirection(DcMotor.Direction.REVERSE);
+    leftmotor.setDirection(DcMotor.Direction.FORWARD);
+    waitForStart();
+    if (opModeIsActive()) {
+      while (opModeIsActive()) {
+        vertical = -gamepad1.right_stick_y;
+        horizontal = gamepad1.right_stick_x;
+        pivot = gamepad1.left_stick_x;
+        leftmotor.setPower(-pivot + vertical + horizontal);
+        rightmotor.setPower(pivot + (vertical - horizontal));
+        // Put loop blocks here
+        // Control servo pa
+        if (gamepad1.right_bumper) {
+          robotarm1.setPosition(1);
+        }
+        if (gamepad1.left_bumper) {
+          robotarm1.setPosition(0.67);
+        }
+        if (gamepad1.dpad_right) {
+          robotarm2.setPosition(0.62);
+        }
+        if (gamepad1.dpad_left) {
+          robotarm2.setPosition(0);
+        }
+        if (gamepad1.y) {
+          robotarm3.setPosition(0.5);
+        } else {
+          robotarm3.setPosition(1);
+        }
+        if (gamepad1.b) {
+          RightServo.setPosition(0.85);
+        } else {
+          RightServo.setPosition(0.36);
+        }
+        if (gamepad1.a) {
+          LeftServo.setPosition(0.2);
+        } else {
+          LeftServo.setPosition(0.65);
+        }
+        telemetry.addData("Servo move", robotarm1.getPosition());
+        telemetry.update();
+      }
+    }
+  }
+}
